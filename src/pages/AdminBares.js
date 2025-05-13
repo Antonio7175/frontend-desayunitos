@@ -16,9 +16,10 @@ const AdminBares = () => {
 
   const fetchBares = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/bares", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+   const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bares`, {
+  headers: { Authorization: `Bearer ${token}` },
+});
+
       setBares(response.data);
     } catch (error) {
       console.error("Error al obtener bares", error);
@@ -33,7 +34,7 @@ const AdminBares = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/bares/${barId}/imagen`,
+        `${process.env.REACT_APP_API_URL}/api/bares/${barId}/imagen`,
         formData,
         { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } }
       );
@@ -54,7 +55,7 @@ const AdminBares = () => {
     try {
       // 1️⃣ Primero, creamos el bar sin imagen
       const response = await axios.post(
-        "http://localhost:8080/api/bares",
+        `${process.env.REACT_APP_API_URL}/api/bare`,
         { nombre, direccion },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -92,7 +93,7 @@ const AdminBares = () => {
     try {
       // 1️⃣ Primero, actualiza los datos del bar (sin imagen)
       const response = await axios.put(
-        `http://localhost:8080/api/bares/${editando}`,
+        `${process.env.REACT_APP_API_URL}/api/bares/${editando}`,
         { nombre, direccion },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -114,7 +115,7 @@ const AdminBares = () => {
   // 📌 Eliminar bar
   const handleDeleteBar = async (barId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/bares/${barId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/bares/${barId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchBares();
@@ -161,7 +162,7 @@ const AdminBares = () => {
                 <strong>{bar.nombre}</strong> - {bar.direccion}
                 <br />
                 {bar.imagenUrl && (
-                  <img src={`http://localhost:8080${bar.imagenUrl}`} 
+                  <img src={`${process.env.REACT_APP_API_URL}${bar.imagenUrl}`} 
                     alt={bar.nombre} 
                     className="img-thumbnail mt-2"
                     onError={(e) => e.target.src = "/default-image.jpg"}

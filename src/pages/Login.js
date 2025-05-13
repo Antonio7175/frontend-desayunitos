@@ -10,7 +10,7 @@ const Login = ({ setUser }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/usuarios/login", { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/usuarios/login`, { email, password });
 
       if (!response.data.token) {
         alert("Error: No se recibió token del backend");
@@ -20,7 +20,7 @@ const Login = ({ setUser }) => {
       localStorage.setItem("token", response.data.token);
 
       // 🔹 Recuperar el usuario autenticado
-      const userResponse = await axios.get("http://localhost:8080/api/usuarios/me", {
+      const userResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/usuarios/me`, {
         headers: { Authorization: `Bearer ${response.data.token}` },
       });
 

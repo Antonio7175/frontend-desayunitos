@@ -20,7 +20,7 @@ const AdminDesayunos = () => {
 
   const fetchDesayunos = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/desayunos", {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/desayunos`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDesayunos(response.data);
@@ -32,7 +32,7 @@ const AdminDesayunos = () => {
 
   const fetchBares = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/bares", {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bares`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBares(response.data);
@@ -49,7 +49,7 @@ const AdminDesayunos = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/desayunos/${desayunoId}/imagen`,
+        `${process.env.REACT_APP_API_URL}/api/desayunos/${desayunoId}/imagen`,
         formData,
         { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } }
       );
@@ -70,7 +70,7 @@ const AdminDesayunos = () => {
     try {
       // 1️⃣ Primero, crea el desayuno sin imagen
       const response = await axios.post(
-        `http://localhost:8080/api/desayunos/${barId}`,
+        `${process.env.REACT_APP_API_URL}/api/desayunos/${barId}`,
         { nombre, descripcion, precio },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -86,7 +86,7 @@ const AdminDesayunos = () => {
       // 3️⃣ Finalmente, actualizamos el desayuno con la imagen (si es necesario)
       if (imagenUrl) {
         await axios.put(
-          `http://localhost:8080/api/desayunos/${desayunoId}`,
+          `${process.env.REACT_APP_API_URL}/api/desayunos/${desayunoId}`,
           { imagenUrl },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -127,7 +127,7 @@ const AdminDesayunos = () => {
 
       // 2️⃣ Luego, actualizamos el desayuno con la imagen (si hay una nueva)
       await axios.put(
-        `http://localhost:8080/api/desayunos/${editando}`,
+        `${process.env.REACT_APP_API_URL}/api/desayunos/${editando}`,
         { nombre, descripcion, precio, imagenUrl },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -144,7 +144,7 @@ const AdminDesayunos = () => {
   // 📌 Eliminar desayuno
   const handleDeleteDesayuno = async (desayunoId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/desayunos/${desayunoId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/desayunos/${desayunoId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchDesayunos();
@@ -202,7 +202,7 @@ const AdminDesayunos = () => {
                 <br />
                 {desayuno.descripcion && <p>{desayuno.descripcion}</p>}
                 {desayuno.imagenUrl && (
-                  <img src={`http://localhost:8080${desayuno.imagenUrl}`} 
+                  <img src={`${process.env.REACT_APP_API_URL}${desayuno.imagenUrl}`} 
                     alt={desayuno.nombre} 
                     className="img-thumbnail mt-2"
                     onError={(e) => e.target.src = "/default-image.jpg"}

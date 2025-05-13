@@ -9,7 +9,7 @@ const Bares = () => {
     const fetchBares = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8080/api/bares", {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bares`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -33,7 +33,7 @@ const Bares = () => {
             <li key={bar.id} className="list-group-item d-flex align-items-center">
               {bar.imagenUrl && (
                 <img 
-                  src={`http://localhost:8080${bar.imagenUrl}`} 
+                  src={`${process.env.REACT_APP_API_URL}${bar.imagenUrl}`} 
                   alt={bar.nombre} 
                   className="img-thumbnail me-3"
                   style={{ width: "80px", height: "80px" }}

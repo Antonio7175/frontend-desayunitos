@@ -43,7 +43,7 @@ const Pedidos = () => {
     setDesayunoId(""); // Reiniciar selección al cambiar de bar
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://localhost:8080/api/bares/${id}/menu`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bares/${id}/menu`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -65,7 +65,7 @@ const Pedidos = () => {
     }
 
     try {
-      await axios.post("http://localhost:8080/api/pedidos", { usuarioId, barId, desayunoId }, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/pedidos`, { usuarioId, barId, desayunoId }, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       alert("Pedido realizado con éxito");
@@ -106,7 +106,7 @@ const Pedidos = () => {
               />
               {desayuno.imagenUrl && (
                 <img 
-                  src={`http://localhost:8080${desayuno.imagenUrl}`} 
+                  src={`${process.env.REACT_APP_API_URL}${desayuno.imagenUrl}`} 
                   alt={desayuno.nombre} 
                   className="img-thumbnail me-3"
                   style={{ width: "80px", height: "80px" }}

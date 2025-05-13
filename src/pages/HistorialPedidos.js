@@ -8,7 +8,7 @@ const HistorialPedidos = () => {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/pedidos/mis-pedidos", {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/pedidos/mis-pedidos`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPedidos(response.data);
@@ -22,7 +22,7 @@ const HistorialPedidos = () => {
 
   const handleCancelarPedido = async (pedidoId) => {
     try {
-      await axios.put(`http://localhost:8080/api/pedidos/${pedidoId}/cancelar`, {}, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/pedidos/${pedidoId}/cancelar`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

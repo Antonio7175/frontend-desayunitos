@@ -8,7 +8,7 @@ const PedidosAdmin = () => {
   useEffect(() => {
     if (!token) return;
 
-    axios.get("http://localhost:8080/api/pedidos", {
+    axios.get(`${process.env.REACT_APP_API_URL}/api/pedidos`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => setPedidos(response.data))
@@ -17,7 +17,7 @@ const PedidosAdmin = () => {
 
   const handleAcceptPedido = async (pedidoId) => {
     try {
-      await axios.post(`http://localhost:8080/api/pedidos/${pedidoId}/accept`, {}, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/pedidos/${pedidoId}/accept`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Pedido aceptado");

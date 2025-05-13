@@ -16,12 +16,12 @@ const Perfil = ({ user }) => {
 
   const fetchUsuario = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/usuarios/me", {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/usuarios/me`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setUsuario(response.data);
       if (response.data.logoUrl) {
-        setPreview(`http://localhost:8080${response.data.logoUrl}`);
+        setPreview(`${process.env.REACT_APP_API_URL}${response.data.logoUrl}`);
       }
     } catch (error) {
       console.error("Error obteniendo usuario:", error);
@@ -44,7 +44,7 @@ const Perfil = ({ user }) => {
 
     try {
       await axios.put(
-        "http://localhost:8080/api/usuarios/cambiar-password",
+        `${process.env.REACT_APP_API_URL}/api/usuarios/cambiar-password`,
         { email: usuario?.email, nuevaPassword },
         config
       );
@@ -82,7 +82,7 @@ const Perfil = ({ user }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/usuarios/${usuario.id}/logo`,
+        `${process.env.REACT_APP_API_URL}/api/usuarios/${usuario.id}/logo`,
         formData,
         {
           headers: {
@@ -93,7 +93,7 @@ const Perfil = ({ user }) => {
       );
 
       if (response.data) {
-        setPreview(`http://localhost:8080${response.data}`);
+        setPreview(`${process.env.REACT_APP_API_URL}${response.data}`);
         setMensaje("¡Imagen actualizada con éxito!");
       }
     } catch (error) {

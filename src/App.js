@@ -17,6 +17,12 @@ import Contacto from "./pages/Contacto";
 import 'bootstrap/dist/css/bootstrap.min.css'; // ya deberías tener esto
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // <--- ESTO ES CLAVE
 import WeatherWidget from "./components/WeatherWidget"; // ⬅️ Widget del clima
+import CrearComanda from "./pages/CrearComanda";
+import VerComanda from "./pages/VerComanda";
+import AdminComanda from "./pages/AdminComanda";
+import ComandasPendientes from "./pages/ComandasPendientes";
+import UnirseComanda from "./pages/UnirseComanda";
+
 import "./App.css";
 
 const App = () => {
@@ -52,43 +58,48 @@ const App = () => {
       <div className="container mt-4">
         <WeatherWidget /> {/* ⬅️ Widget del clima agregado */}
         <Routes>
-          {/* Rutas accesibles por cualquier usuario */}
-          <Route path="/" element={<Home user={user} />} />
-          <Route path="/contacto" element={<Contacto />} />
+  {/* Públicas */}
+  <Route path="/" element={<Home user={user} />} />
+  <Route path="/contacto" element={<Contacto />} />
+  <Route path="/comanda/:codigo" element={<VerComanda />} />
+  <Route path="/unirse-comanda/:codigo" element={<UnirseComanda />} />
 
-          {/* Rutas de usuarios autenticados */}
-          {user && (
-            <>
-              {user.role === "USER" && (
-                <>
-                  <Route path="/bares" element={<Bares />} />
-                  <Route path="/pedidos" element={<Pedidos />} />
-                  <Route path="/perfil" element={<Perfil user={user} />} />
-                  <Route path="/historial-pedidos" element={<HistorialPedidos />} />
-                </>
-              )}
 
-              {user.role === "ADMIN" && (
-                <>
-                  <Route path="/admin/pedidos" element={<AdminPedidos />} />
-                  <Route path="/admin/bares" element={<AdminBares />} />
-                  <Route path="/admin/desayunos" element={<AdminDesayunos />} />
-                </>
-              )}
-            </>
-          )}
+  {/* Autenticación */}
+  {!user && (
+    <>
+      <Route path="/login" element={<Login setUser={setUser} />} />
+      <Route path="/register" element={<Register setUser={setUser} />} />
+    </>
+  )}
 
-          {/* Rutas de autenticación */}
-          {!user && (
-            <>
-              <Route path="/login" element={<Login setUser={setUser} />} />
-              <Route path="/register" element={<Register setUser={setUser} />} />
-            </>
-          )}
+  {/* Usuarios autenticados */}
+  {user && (
+    <>
+      {user.role === "USER" && (
+        <>
+          <Route path="/bares" element={<Bares />} />
+          <Route path="/pedidos" element={<Pedidos />} />
+          <Route path="/perfil" element={<Perfil user={user} />} />
+          <Route path="/historial-pedidos" element={<HistorialPedidos />} />
+          <Route path="/crear-comanda" element={<CrearComanda />} />
+          <Route path="/admin/comanda/:codigo" element={<AdminComanda />} />
+        </>
+      )}
+      {user.role === "ADMIN" && (
+        <>
+          <Route path="/admin/pedidos" element={<AdminPedidos />} />
+          <Route path="/admin/bares" element={<AdminBares />} />
+          <Route path="/admin/desayunos" element={<AdminDesayunos />} />
+          <Route path="/admin/comandas-pendientes" element={<ComandasPendientes />} />
+        </>
+      )}
+    </>
+  )}
 
-          {/* Redirección si la ruta no existe */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+  <Route path="*" element={<Navigate to="/" />} />
+</Routes>
+
       </div>
       <Footer />
     </Router>

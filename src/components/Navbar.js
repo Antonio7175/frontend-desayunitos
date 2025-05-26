@@ -2,6 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ user, onLogout }) => {
+  const codigoComanda = localStorage.getItem("codigo_comanda");
+  const adminEmail = localStorage.getItem("admin_comanda_email");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("codigo_comanda");
+    localStorage.removeItem("admin_comanda_email");
+    onLogout();
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -14,7 +25,6 @@ const Navbar = ({ user, onLogout }) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-            {/* Enlaces para usuarios autenticados */}
             {user ? (
               <>
                 {user.role === "USER" && (
@@ -28,6 +38,19 @@ const Navbar = ({ user, onLogout }) => {
                     <li className="nav-item">
                       <Link className="nav-link" to="/historial-pedidos">Mis Pedidos</Link>
                     </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/crear-comanda">Crear Comanda</Link>
+                    </li>
+                    {codigoComanda && (
+                      <li className="nav-item">
+                        <Link className="nav-link" to={`/comanda/${codigoComanda}`}>Ver Comanda</Link>
+                      </li>
+                    )}
+                    {codigoComanda && user.email === adminEmail && (
+                      <li className="nav-item">
+                        <Link className="nav-link text-success fw-bold" to={`/admin/comanda/${codigoComanda}`}>Gestionar Comanda</Link>
+                      </li>
+                    )}
                     <li className="nav-item">
                       <Link className="nav-link" to="/perfil">Perfil</Link>
                     </li>
@@ -45,29 +68,28 @@ const Navbar = ({ user, onLogout }) => {
                     <li className="nav-item">
                       <Link className="nav-link" to="/admin/bares">Admin Bares</Link>
                     </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/admin/comandas-pendientes">Admin Comandas</Link>
+                    </li>
                   </>
                 )}
 
-                {/* Contacto antes de Logout */}
                 <li className="nav-item">
                   <Link className="nav-link" to="/contacto">Contacto</Link>
                 </li>
 
                 <li className="nav-item">
-                  <button className="btn btn-danger ms-3" onClick={onLogout}>Logout</button>
+                  <button className="btn btn-danger ms-3" onClick={handleLogout}>Logout</button>
                 </li>
               </>
             ) : (
               <>
-                {/* Enlaces para usuarios no autenticados */}
                 <li className="nav-item">
                   <Link className="nav-link" to="/login">Login</Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/register">Registro</Link>
                 </li>
-
-                {/* Contacto siempre visible */}
                 <li className="nav-item">
                   <Link className="nav-link" to="/contacto">Contacto</Link>
                 </li>

@@ -28,7 +28,9 @@ const HistorialPedidos = () => {
 
       setPedidos((prevPedidos) =>
         prevPedidos.map((pedido) =>
-          pedido.id === pedidoId ? { ...pedido, estado: "Cancelado" } : pedido
+          pedido.id === pedidoId
+            ? { ...pedido, estado: "CANCELADO", canceladoPorAdmin: false }
+            : pedido
         )
       );
     } catch (error) {
@@ -36,9 +38,42 @@ const HistorialPedidos = () => {
     }
   };
 
+  const handleBorrarHistorial = async () => {
+  if (!window.confirm("¿Estás seguro de que quieres borrar tu historial de pedidos?")) return;
+
+  try {
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/pedidos/eliminar-todos`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setPedidos([]); // Limpiar del estado también
+  } catch (error) {
+    console.error("Error al eliminar historial:", error);
+  }
+};
+
+
+  const traducirEstado = (estado) => {
+    switch (estado) {
+      case "PENDIENTE":
+        return "⏳ Pendiente";
+      case "ACEPTADO":
+        return "✅ Aceptado";
+      case "CANCELADO":
+        return "❌ Cancelado";
+      case "PAGADO":
+        return "💰 Pagado";
+      default:
+        return estado;
+    }
+  };
+
   return (
     <div className="container">
       <h2>Historial de Pedidos</h2>
+      <button className="btn btn-warning mb-3" onClick={handleBorrarHistorial}>
+  Borrar historial de pedidos cancelados o aceptados
+</button>
+
       {pedidos.length === 0 ? (
         <p>No tienes pedidos aún.</p>
       ) : (
@@ -46,11 +81,34 @@ const HistorialPedidos = () => {
           {pedidos.map((pedido) => (
             <li key={pedido.id} className="list-group-item">
               <strong>Desayuno:</strong> {pedido.desayuno.nombre} <br />
-              <strong>Estado:</strong> {pedido.estado} <br />
-              {pedido.estado === "Pendiente" && (
-                <button className="btn btn-danger btn-sm mt-2" onClick={() => handleCancelarPedido(pedido.id)}>
+              <strong>Estado:</strong>{" "}
+              <span
+                className={
+                  pedido.estado === "CANCELADO"
+                    ? "text-danger"
+                    : pedido.estado === "ACEPTADO"
+                    ? "text-success"
+                    : ""
+                }
+              >
+                {traducirEstado(pedido.estado)}
+              </span>
+              <br />
+
+              {pedido.estado === "PENDIENTE" && (
+                <button
+                  className="btn btn-danger btn-sm mt-2"
+                  onClick={() => handleCancelarPedido(pedido.id)}
+                >
                   Cancelar Pedido
                 </button>
+              )}
+
+              {pedido.estado === "CANCELADO" && (
+                <div className="text-danger mt-2">
+                  Este pedido fue cancelado por{" "}
+                  {pedido.canceladoPorAdmin ? "el bar" : "ti"}.
+                </div>
               )}
             </li>
           ))}

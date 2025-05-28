@@ -10,20 +10,20 @@ const AdminComanda = () => {
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
+    const cargarComanda = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/comandas/${codigo}`);
+        const { comanda, items } = response.data;
+        setComanda(comanda);
+        setItems(items);
+      } catch (error) {
+        console.error("Error al cargar comanda", error);
+        setMensaje("No se pudo cargar la comanda.");
+      }
+    };
+
     cargarComanda();
   }, [codigo]);
-
-  const cargarComanda = async () => {
-  try {
-    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/comandas/${codigo}`);
-    setComanda(response.data.comanda);
-    setItems(response.data.items);
-  } catch (error) {
-    console.error("Error al cargar comanda", error);
-    setMensaje("No se pudo cargar la comanda.");
-  }
-};
-
 
   const enviarComanda = async () => {
     if (!horaVisita) {
@@ -48,6 +48,30 @@ const AdminComanda = () => {
     }
   };
 
+  const cancelarComanda = async () => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas cancelar esta comanda?");
+    if (!confirmar) return;
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/comandas/${comanda.id}/cerrar`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+
+      localStorage.removeItem("codigo_comanda");
+      localStorage.removeItem("admin_comanda_email");
+
+      alert("❌ Comanda cancelada.");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error al cancelar comanda", error);
+      alert("❌ No se pudo cancelar la comanda.");
+    }
+  };
+
   return (
     <div className="container">
       <h2>Gestionar Comanda: {codigo}</h2>
@@ -68,9 +92,14 @@ const AdminComanda = () => {
             />
           </div>
 
-          <button className="btn btn-primary mb-4" onClick={enviarComanda}>
-            Enviar comanda al bar
-          </button>
+          <div className="mb-4">
+            <button className="btn btn-primary me-3" onClick={enviarComanda}>
+              Enviar comanda al bar
+            </button>
+            <button className="btn btn-danger" onClick={cancelarComanda}>
+              Cancelar Comanda
+            </button>
+          </div>
 
           <h4>Pedidos de esta comanda</h4>
           <ul className="list-group">

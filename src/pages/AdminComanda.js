@@ -9,6 +9,8 @@ const AdminComanda = () => {
   const [horaVisita, setHoraVisita] = useState("");
   const [mensaje, setMensaje] = useState("");
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
   useEffect(() => {
     const cargarComanda = async () => {
       try {
@@ -49,26 +51,32 @@ const AdminComanda = () => {
   };
 
   const cancelarComanda = async () => {
-    const confirmar = window.confirm("¿Estás seguro de que deseas cancelar esta comanda?");
-    if (!confirmar) return;
-
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/comandas/${comanda.id}/cerrar`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/comandas/${comanda.id}/cancelar`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      alert("❌ Comanda cancelada.");
       localStorage.removeItem("codigo_comanda");
       localStorage.removeItem("admin_comanda_email");
-
-      alert("❌ Comanda cancelada.");
       window.location.href = "/";
+    } catch (err) {
+      alert("Error al cancelar la comanda.");
+      console.error(err);
+    }
+  };
+
+  const handleEliminarItem = async (itemId) => {
+    if (!window.confirm("¿Seguro que quieres eliminar este desayuno?")) return;
+
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/comandas/item/${itemId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      setItems((prev) => prev.filter((item) => item.id !== itemId));
     } catch (error) {
-      console.error("Error al cancelar comanda", error);
-      alert("❌ No se pudo cancelar la comanda.");
+      console.error("Error al eliminar el item:", error);
+      alert("❌ No se pudo eliminar el desayuno.");
     }
   };
 
@@ -92,23 +100,33 @@ const AdminComanda = () => {
             />
           </div>
 
-          <div className="mb-4">
-            <button className="btn btn-primary me-3" onClick={enviarComanda}>
-              Enviar comanda al bar
-            </button>
-            <button className="btn btn-danger" onClick={cancelarComanda}>
-              Cancelar Comanda
-            </button>
-          </div>
+          <button className="btn btn-primary mb-4" onClick={enviarComanda}>
+            Enviar comanda al bar
+          </button>
 
           <h4>Pedidos de esta comanda</h4>
           <ul className="list-group">
             {items.map((item) => (
-              <li key={item.id} className="list-group-item">
-                <strong>{item.nombreInvitado}</strong>: {item.desayuno.nombre} {item.autorizado ? "✅" : "⏳"}
+              <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                  <strong>{item.nombreInvitado}</strong>: {item.desayuno.nombre} {item.autorizado ? "✅" : "⏳"}
+                </span>
+
+                {comanda.admin.email === user.email && (
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => handleEliminarItem(item.id)}
+                  >
+                    🗑️ Eliminar
+                  </button>
+                )}
               </li>
             ))}
           </ul>
+
+          <button className="btn btn-danger mt-4" onClick={cancelarComanda}>
+            Cancelar Comanda
+          </button>
         </>
       )}
     </div>

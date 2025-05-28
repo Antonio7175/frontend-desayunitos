@@ -21,9 +21,12 @@ const UnirseComanda = () => {
         const menuRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/bares/${barId}/menu`);
         setDesayunos(menuRes.data);
       } catch (error) {
-        console.error("❌ Error al cargar la comanda:", error);
-        setMensaje("No se pudo cargar la comanda.");
+  if (error.response && error.response.status === 403) {
+    setMensaje("❌ Esta comanda ha sido cancelada.");
+  } else {
+    setMensaje("No se pudo cargar la comanda.");
       }
+    }
     };
     fetchItems();
   }, [codigo]);

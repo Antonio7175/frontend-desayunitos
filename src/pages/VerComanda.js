@@ -23,10 +23,13 @@ const VerComanda = () => {
             setItems(response.data);
           }
         }
-      } catch (error) {
-        console.error("Error al obtener comanda", error);
-        setMensaje("No se pudo cargar la comanda.");
+      }  catch (error) {
+  if (error.response && error.response.status === 403) {
+    setMensaje("❌ Esta comanda ha sido cancelada.");
+  } else {
+    setMensaje("No se pudo cargar la comanda.");
       }
+    }
     };
 
     fetchComanda();

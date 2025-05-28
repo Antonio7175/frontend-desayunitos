@@ -12,26 +12,25 @@ const UnirseComanda = () => {
 
   // Cargar items existentes en la comanda
   useEffect(() => {
-  const fetchItems = async () => {
-    try {
-      const res = await axios.get(`http://localhost:8080/api/comandas/${codigo}`);
-      setItems(res.data.items);
+    const fetchItems = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/comandas/${codigo}`);
+        setItems(res.data.items);
 
-      const barId = res.data.comanda.bar.id;
-      const menuRes = await axios.get(`http://localhost:8080/api/bares/${barId}/menu`);
-      setDesayunos(menuRes.data);
-    } catch (error) {
-      console.error("❌ Error al cargar la comanda:", error);
-      setMensaje("No se pudo cargar la comanda.");
-    }
-  };
-  fetchItems();
-}, [codigo]);
-
+        const barId = res.data.comanda.bar.id;
+        const menuRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/bares/${barId}/menu`);
+        setDesayunos(menuRes.data);
+      } catch (error) {
+        console.error("❌ Error al cargar la comanda:", error);
+        setMensaje("No se pudo cargar la comanda.");
+      }
+    };
+    fetchItems();
+  }, [codigo]);
 
   const agregarItem = async () => {
     try {
-      await axios.post(`http://localhost:8080/api/comandas/${codigo}/agregar-item`, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/comandas/${codigo}/agregar-item`, {
         desayunoId: Number(desayunoId),
         nombreInvitado,
       });

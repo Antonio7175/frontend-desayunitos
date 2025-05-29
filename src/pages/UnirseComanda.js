@@ -9,6 +9,8 @@ const UnirseComanda = () => {
   const [nombreInvitado, setNombreInvitado] = useState("");
   const [desayunoId, setDesayunoId] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [comanda, setComanda] = useState(null);
+
 
   // Cargar items existentes en la comanda
   useEffect(() => {

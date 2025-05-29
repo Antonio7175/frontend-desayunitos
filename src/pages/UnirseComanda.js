@@ -46,6 +46,32 @@ const UnirseComanda = () => {
     }
   };
 
+  useEffect(() => {
+  const cargarComanda = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/comandas/${codigo}`);
+      const { comanda } = response.data;
+
+      // 🚫 Si la comanda ya fue cancelada o enviada, redirige o muestra mensaje
+      if (comanda.estado !== "ACEPTADA") {
+        alert("Esta comanda ya no está disponible.");
+        window.location.href = "/"; // o navega a otra página
+        return;
+      }
+
+      setComanda(comanda);
+      setItems(response.data.items);
+    } catch (error) {
+      console.error("Error al cargar comanda:", error);
+      alert("Comanda no encontrada o inaccesible.");
+      window.location.href = "/";
+    }
+  };
+
+  cargarComanda();
+}, [codigo]);
+
+
   return (
     <div className="container mt-4">
       <h2>Unirse a la Comanda: {codigo}</h2>

@@ -9,7 +9,8 @@ const UnirseComanda = () => {
   const [nombreInvitado, setNombreInvitado] = useState("");
   const [desayunoId, setDesayunoId] = useState("");
   const [mensaje, setMensaje] = useState("");
-  const [comanda, setComanda] = useState(null);
+  const [, setComanda] = useState(null); // 👈 ignora el primer valor
+
 
 
   // Cargar items existentes en la comanda
@@ -55,7 +56,7 @@ const UnirseComanda = () => {
       const { comanda } = response.data;
 
       // 🚫 Si la comanda ya fue cancelada o enviada, redirige o muestra mensaje
-      if (comanda.estado !== "ACEPTADA") {
+      if (comanda.estado !== "ABIERTA") {
         alert("Esta comanda ya no está disponible.");
         window.location.href = "/"; // o navega a otra página
         return;

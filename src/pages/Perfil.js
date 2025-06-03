@@ -122,7 +122,7 @@ const Perfil = ({ user }) => {
   {/* Información del usuario */}
   <div className="perfil-info">
     <p><strong>Email:</strong> {usuario?.email}</p>
-    <p><strong>Rol:</strong> {usuario?.role}</p>
+    <p><strong>Rol:</strong> {usuario?.rol}</p>
   </div>
 
   <h3>Cambiar Contraseña</h3>

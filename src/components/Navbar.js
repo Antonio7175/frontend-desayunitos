@@ -54,6 +54,10 @@ const Navbar = ({ user, onLogout }) => {
                     <li className="nav-item"><Link className="nav-link" to="/pedidos">Pedidos</Link></li>
                     <li className="nav-item"><Link className="nav-link" to="/historial-pedidos">Mis Pedidos</Link></li>
                     <li className="nav-item"><Link className="nav-link" to="/crear-comanda">Crear Comanda</Link></li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/historial-comandas">Historial Comandas</Link>
+                    </li>
+
 
                     <li className="nav-item">
                       <Link
@@ -93,6 +97,10 @@ const Navbar = ({ user, onLogout }) => {
                     <li className="nav-item"><Link className="nav-link" to="/admin/desayunos">Admin Desayunos</Link></li>
                     <li className="nav-item"><Link className="nav-link" to="/admin/bares">Admin Bares</Link></li>
                     <li className="nav-item"><Link className="nav-link" to="/admin/comandas-pendientes">Admin Comandas</Link></li>
+                    <li className="nav-item">
+  <Link className="nav-link" to="/admin/historial-comandas">Historial Comandas</Link>
+</li>
+
                   </>
                 )}
 

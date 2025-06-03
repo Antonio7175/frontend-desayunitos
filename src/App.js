@@ -20,6 +20,10 @@ import VerComanda from "./pages/VerComanda";
 import AdminComanda from "./pages/AdminComanda";
 import ComandasPendientes from "./pages/ComandasPendientes";
 import UnirseComanda from "./pages/UnirseComanda";
+import HistorialUsuario from "./pages/HistorialUsuario";
+import HistorialAdmin from "./pages/HistorialAdmin";
+
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -74,6 +78,7 @@ const App = () => {
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/comanda/:codigo" element={<VerComanda />} />
           <Route path="/unirse-comanda/:codigo" element={<UnirseComanda />} />
+
           {!user && (
             <>
               <Route path="/login" element={<Login setUser={setUser} />} />
@@ -88,6 +93,7 @@ const App = () => {
               <Route path="/historial-pedidos" element={<HistorialPedidos />} />
               <Route path="/crear-comanda" element={<CrearComanda />} />
               <Route path="/admin/comanda/:codigo" element={<AdminComanda />} />
+              <Route path="/historial-comandas" element={<HistorialUsuario />} />
             </>
           )}
           {user && user.role === "ADMIN" && (
@@ -96,6 +102,7 @@ const App = () => {
               <Route path="/admin/bares" element={<AdminBares />} />
               <Route path="/admin/desayunos" element={<AdminDesayunos />} />
               <Route path="/admin/comandas-pendientes" element={<ComandasPendientes />} />
+              <Route path="/admin/historial-comandas" element={<HistorialAdmin />} />
             </>
           )}
           <Route path="*" element={<Navigate to="/" />} />

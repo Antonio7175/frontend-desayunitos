@@ -50,24 +50,29 @@ const Login = ({ setUser }) => {
     <div className="container">
       <h2>Iniciar Sesión</h2>
       <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          className="form-control mb-2"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          className="form-control mb-2"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="btn btn-primary">Login</button>
-      </form>
+  <input
+    type="email"
+    className="form-control mb-2"
+    placeholder="Email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    required
+  />
+  <input
+    type="password"
+    className="form-control mb-2"
+    placeholder="Contraseña"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    required
+  />
+  <button type="submit" className="btn btn-primary">Login</button>
+</form>
+
+<div className="mt-3">
+  <a href="/recuperar-password">¿Olvidaste tu contraseña?</a>
+</div>
+
     </div>
   );
 };

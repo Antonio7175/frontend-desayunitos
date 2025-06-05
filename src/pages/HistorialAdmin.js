@@ -17,7 +17,7 @@ const HistorialAdmin = () => {
       // 🔽 Ordenamos por fecha (más reciente primero) y cogemos las 10 primeras
       const ultimasDiez = response.data
         .sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion))
-        .slice(0, 10);
+        .slice(0, 5);
 
       setComandas(ultimasDiez);
     } catch (error) {

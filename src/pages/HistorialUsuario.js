@@ -17,7 +17,7 @@ const HistorialUsuario = () => {
       // 🔽 Ordenamos por fecha (más reciente primero) y cogemos las 10 primeras
       const ultimasDiez = response.data
         .sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion))
-        .slice(0, 10);
+        .slice(0, 5);
 
       setComandas(ultimasDiez);
     } catch (error) {
@@ -28,22 +28,6 @@ const HistorialUsuario = () => {
 
   fetchComandas();
 }, []);
-
-  const eliminarComanda = async (id) => {
-  console.log("Intentando eliminar comanda con ID:", id);
-
-  try {
-    await axios.delete(`${process.env.REACT_APP_API_URL}/api/comandas/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    setComandas(comandas.filter((c) => c.id !== id));
-  } catch (error) {
-    console.error("Error al eliminar comanda", error);
-    alert("❌ No se pudo eliminar la comanda.");
-  }
-};
 
 
 
@@ -70,16 +54,6 @@ const HistorialUsuario = () => {
         </li>
       ))}
     </ul>
-
-    {/* 🔐 Mostrar botón eliminar solo si el user es el admin */}
-    {comanda.admin?.email === JSON.parse(localStorage.getItem("user"))?.email && (
-      <button
-        className="btn btn-danger mt-2"
-        onClick={() => eliminarComanda(comanda.id)}
-      >
-        🗑️ Eliminar
-      </button>
-    )}
   </li>
 ))}
 

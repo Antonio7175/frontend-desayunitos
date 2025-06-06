@@ -9,31 +9,28 @@ const VerComanda = () => {
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
-    const fetchComanda = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/comandas/${codigo}`);
-        if (response.data.comanda && response.data.items) {
-          setComanda(response.data.comanda);
-          setItems(response.data.items);
-        } else if (Array.isArray(response.data)) {
-          // fallback por si devuelve lista de items sin DTO
-          if (response.data.length > 0) {
-            const primera = response.data[0];
-            setComanda(primera.comanda);
-            setItems(response.data);
-          }
-        }
-      }  catch (error) {
-  if (error.response && error.response.status === 403) {
-    setMensaje("❌ Esta comanda ha sido cancelada.");
-  } else {
-    setMensaje("No se pudo cargar la comanda.");
+  const fetchComanda = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/comandas/${codigo}`);
+      const c = response.data.comanda;
+      if (c.estado !== "ABIERTA") {
+        setMensaje("❌ Esta comanda ya no está disponible.");
+        return;
+      }
+      setComanda(c);
+      setItems(response.data.items);
+    } catch (error) {
+      if (error.response?.status === 403) {
+        setMensaje("❌ Esta comanda ha sido cancelada.");
+      } else {
+        setMensaje("No se pudo cargar la comanda.");
       }
     }
-    };
+  };
 
-    fetchComanda();
-  }, [codigo]);
+  fetchComanda();
+}, [codigo]);
+
 
   return (
     <div className="container">

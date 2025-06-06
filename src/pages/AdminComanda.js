@@ -51,45 +51,56 @@ const AdminComanda = () => {
   };
 
   const cancelarComanda = async () => {
-  try {
-    await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/comandas/${comanda.id}/cancelar`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    alert("❌ Comanda cancelada.");
-    localStorage.removeItem("codigo_comanda");
-    localStorage.removeItem("admin_comanda_email");
-    window.location.href = "/";
-  } catch (err) {
-    console.error("Error al cancelar la comanda:", err);
-    alert("❌ No se pudo cancelar la comanda.");
-  }
-};
-
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/comandas/${comanda.id}/cancelar`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      alert("❌ Comanda cancelada.");
+      localStorage.removeItem("codigo_comanda");
+      localStorage.removeItem("admin_comanda_email");
+      window.location.href = "/";
+    } catch (err) {
+      console.error("Error al cancelar la comanda:", err);
+      alert("❌ No se pudo cancelar la comanda.");
+    }
+  };
 
   const handleEliminarItem = async (itemId) => {
-  if (!window.confirm("¿Seguro que quieres eliminar este desayuno?")) return;
+    if (!window.confirm("¿Seguro que quieres eliminar este desayuno?")) return;
 
-  try {
-    await axios.delete(
-      `${process.env.REACT_APP_API_URL}/api/comandas/${comanda.id}/item/${itemId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/comandas/${comanda.id}/item/${itemId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setItems((prev) => prev.filter((item) => item.id !== itemId));
+    } catch (error) {
+      console.error("Error al eliminar el item:", error);
+      alert("❌ No se pudo eliminar el desayuno.");
+    }
+  };
+
+  // ✅ Mostrar mensaje si la comanda ya no está abierta
+  if (comanda && comanda.estado !== "ABIERTA") {
+    return (
+      <div className="container">
+        <h2>Gestionar Comanda</h2>
+        <div className="alert alert-warning">
+          ⚠️ Esta comanda ya no puede gestionarse porque ha sido {comanda.estado.toLowerCase()}.
+        </div>
+      </div>
     );
-    setItems((prev) => prev.filter((item) => item.id !== itemId));
-  } catch (error) {
-    console.error("Error al eliminar el item:", error);
-    alert("❌ No se pudo eliminar el desayuno.");
   }
-};
 
   return (
     <div className="container">
